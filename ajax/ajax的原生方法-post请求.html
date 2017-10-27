@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>初识Ajax开发</title>
+    <script type="text/javascript">
+    /*
+    xml数据格式
+
+    元数据：描述数据的数据
+
+    这种数据格式的弊端：
+    1、元数据占用的数据量比较大，不利于大量数据的网络传输
+    2、解析不太方便
+    */
+    window.onload = function(){
+        var btn = document.getElementById('btn');
+        btn.onclick = function(){
+            var uname = document.getElementById('username').value;
+            var pw = document.getElementById('password').value;
+
+            // 1、创建XMLHttpRequest对象
+            var xhr = null;
+            if(window.XMLHttpRequest){
+                xhr = new XMLHttpRequest();//标准
+            }else{
+                xhr = new ActiveXObject("Microsoft");//IE6
+            }
+            // readyState=0表示xhr对象创建完成
+            // 2、准备发送
+            var param = 'username='+uname+'&password='+pw;
+            // xhr.open('post','data.xml',true);
+            xhr.open('post','06.php',true);
+            // 3、执行发送动作
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.send(param);//post请求参数在这里传递，并且不需要转码
+            // 4、指定回调函数
+            // 该函数调用的条件就是readyState状态发生变化（不包括从0变为1）
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200){
+                        var data = xhr.responseXML;
+                        var bookList = data.getElementsByTagName('booklist');
+                        // var books = bookList[0].childNodes;
+                        var books = bookList[0].children;
+
+                        var book1 = books[0];
+                        // console.log(books[0].nodeType);
+                        // console.log(books[1].nodeType);
+                        // console.log(book1);
+                        // var name = book1.children[0].innerHTML;
+                        // var author = book1.children[1].innerHTML;
+                        // var desc = book1.children[2].innerHTML;
+
+                        var name = book1.children[0].firstChild.wholeText;
+                        var author = book1.children[1].firstChild.wholeText;
+                        var desc = book1.children[2].firstChild.wholeText;
+                        console.log(name,author,desc);
+                    }
+                }
+            }
+            
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <form>
+        用户名：
+        <input type="text" name="username" id="username"><span id="info"></span>
+        <br> 密码：
+        <input type="text" name="password" id="password">
+        <input type="button" value="登录" id="btn">
+    </form>
+</body>
+
+</html>

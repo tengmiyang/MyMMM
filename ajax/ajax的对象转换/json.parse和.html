@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript">
+    // 对象
+    /*
+    json数据和普通的js对象的区别：
+    1、json数据没有变量
+    2、json形式的数据结尾没有分号
+    3、json数据中的键必须用双引号包住
+    */
+    // var obj = {
+    //     name: 'zhangsan',
+    //     age : 12,
+    //     lover : ['coding','singing','dancing'],
+    //     friend : {
+    //         high : '180cm',
+    //         weight : '80kg'
+    //     }
+    // };
+
+    var str = '{"name":"zhangsan","age":"12"}';
+    var obj = JSON.parse(str);//把json形式的字符串转成对象
+    
+    var str1 = JSON.stringify(obj);//把对象转成字符串
+    console.log(str1);//{"name":"zhangsan","age":"12"}
+
+
+    window.onload = function(){
+        var btn = document.getElementById('btn');
+        btn.onclick = function(){
+            var uname = document.getElementById('username').value;
+            var pw = document.getElementById('password').value;
+
+            // 1、创建XMLHttpRequest对象
+            var xhr = null;
+            if(window.XMLHttpRequest){
+                xhr = new XMLHttpRequest();//标准
+            }else{
+                xhr = new ActiveXObject("Microsoft");//IE6
+            }
+            // readyState=0表示xhr对象创建完成
+            // 2、准备发送
+            var param = 'username='+uname+'&password='+pw;
+            // xhr.open('post','data.json',true);
+            xhr.open('post','07.php',true);
+            // 3、执行发送动作
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.send(param);//post请求参数在这里传递，并且不需要转码
+            // 4、指定回调函数
+            // 该函数调用的条件就是readyState状态发生变化（不包括从0变为1）
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200){
+                        var data = xhr.responseText;
+                        var data = JSON.parse(data);
+                        // console.log(data[0],data[1],data[2]);
+                        console.log(data.name1);
+                        console.log(data.name2);
+                        console.log(data.name3);
+                        // var d = eval("(" + data + ")");//eval的作用就是把字符串解析成js代码并执行
+                        // var d = JSON.parse(data);
+                        // console.log(d.name);
+                        // console.log(d.age);
+                        // console.log(d.friend.high);
+                        // console.log(d.friend.weight);
+                        // console.log(d.friend.lover);
+
+                        // var tag = '<div><span>'+d.name+'</span><span>'+d.age+'</span><span>'+d.lover+'</span><span>'+d.friend.high+'</span></div>';
+                        // document.getElementById("showInfo").innerHTML = tag;
+                    }
+                }
+            }
+            
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <form>
+        用户名：
+        <input type="text" name="username" id="username"><span id="info"></span>
+        <br> 密码：
+        <input type="text" name="password" id="password">
+        <input type="button" value="登录" id="btn">
+    </form>
+    <div id="showInfo"></div>
+</body>
+
+</html>

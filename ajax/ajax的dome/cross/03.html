@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript">
+        /*
+        动态创建script标签发出去的请求是异步请求
+
+        服务器响应的内容是【函数调用】  foo(实参)
+        */
+        function foo(data){
+            console.log(data.username,data.password);
+        }
+        var flag = 1;
+        var script = document.createElement('script');
+        script.src = 'http://tom.com/data.php?flag='+flag;
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(script);
+        // 这里的foo函数由谁调用？实际上有服务器响应的内容（这里的内容就是js代码-函数调用foo(123)）调用
+        
+        // console.log(data);
+
+        // foo({"username":"zhangsan","password":"123456"})
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

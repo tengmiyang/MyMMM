@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript">
+        /*
+        hello就是回调函数
+        这就是jsonp的本质：动态创建script标签，然后通过它的src属性发送跨域请求，然后服务器端响应的数据格式为【函数调用（foo(实参)）】，所以在发送请求之前必须先声明一个函数，并且函数的名字与参数中传递的名字要一致。这里声明的函数是由服务器响应的内容（实际就是一段js代码-函数调用）来调用
+        */
+        function hello(data){
+            console.log(data);
+        }
+        var script = document.createElement('script');
+        script.src = 'http://tom.com/data.php?_cb=hello&username=zhangsan&password=123';
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(script);
+
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

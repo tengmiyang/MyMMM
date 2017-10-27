@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="./ajax2.js"></script>
+    <script type="text/javascript">
+        ajax({
+            url:"http://tom.com/jsonp.php",
+            dataType:'jsonp',
+            data:{username:'zhangsan',password:'123'},
+            jsonp:'cb',
+            jsonpCallback:'abc',
+            success:function(data){//这里的data是形参
+                console.log(data.username,data.password);
+            }
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    #container{
+        width: 400px;
+        min-height: 300px;
+        background-color: lightgreen;
+        margin: auto;
+        padding: 10px;
+        text-align: center;
+    }
+    li{
+        list-style: none;
+        text-align: left;
+    }
+
+    </style>
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript" src="./template.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $("#query").click(function(){
+                var code = $('#city').val();
+                $.ajax({
+                    url : 'http://cdn.weather.hao.360.cn/api_weather_info.php',
+                    data:{app:'hao360',code:code},
+                    jsonp:'_jsonp',
+                    jsonpCallback:'abc',
+                    dataType:'jsonp',
+                    success:function(data){
+                        var sourse = '  {{if weather}}'
+                          +'      {{each weather as value}}'
+                          +'          <div>'
+                          +'              <span>日期：{{value.date}}</span>'
+                          +'              <ul>'
+                          +'                  <li>白天天气{{value.info.day[1]}}</li>'
+                          +'                  <li>白天温度{{value.info.day[2]}}</li>'
+                          +'                  <li>白天风向{{value.info.day[3]}}</li>'
+                          +'                  <li>白天风速{{value.info.day[4]}}</li>'
+                          +'              </ul>'
+                          +'              <ul>'
+                          +'                  <li>夜间天气{{value.info.night[1]}}</li>'
+                          +'                  <li>夜间温度{{value.info.night[2]}}</li>'
+                          +'                  <li>夜间风向{{value.info.night[3]}}</li>'
+                          +'                  <li>夜间风速{{value.info.night[4]}}</li>'
+                          +'              </ul>'
+                          +'          </div>'
+                          +'      {{/each}}'
+                          +'  {{/if}}';
+
+                        var render = template.compile(sourse);
+                        var html = render(data);
+                        $("#info").html(html);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="container">
+        <select id="city">
+            <option value="101010100">北京</option>
+            <option value="101020100">上海</option>
+            <option value="101280101">广州</option>
+            <option value="101280601">深圳</option>
+        </select>
+        <input type="button" value="查询" id="query">
+        <div id="info"></div>
+    </div>
+
+    
+</body>
+</html>

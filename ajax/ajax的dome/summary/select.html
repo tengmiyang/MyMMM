@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    #container{
+        width: 500px;
+        min-height: 300px;
+        background-color: lightgreen;
+        margin: auto;
+        text-align: center;
+        padding: 10px;
+    }
+    </style>
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        // 公用方法
+        function queryData(obj,callback){
+            $.ajax({
+                type:'get',
+                url:'http://localhost/summary/select.php',
+                data:obj,
+                dataType:'json',
+                success:function(data){
+                    callback(data);
+                }
+            });
+        }
+        // 加载省级数据
+        queryData({
+            flag:1
+        },function(data){
+            var option = '';
+            $.each(data,function(i,e){
+                option += '<option value="'+e.id+'">'+e.province+'</option>';
+            });
+            $("#province").append(option);
+        });
+
+        $('#province').change(function(){
+            // $("#city").find('option:gt(0)').remove();
+            $("#city option:gt(0)").remove();
+            queryData({
+                flag:2,
+                pId:$(this).val()
+            },function(data){
+                var option = '';
+                $.each(data,function(i,e){
+                    option += '<option value="'+e.id+'">'+e.city+'</option>';
+                });
+                $("#city").append(option);
+            });
+        });
+
+        $('#city').change(function(){
+            // $("#city").find('option:gt(0)').remove();
+            $("#county option:gt(0)").remove();
+            queryData({
+                flag:3,
+                cId:$(this).val()
+            },function(data){
+                var option = '';
+                $.each(data,function(i,e){
+                    option += '<option value="'+e.id+'">'+e.county+'</option>';
+                });
+                $("#county").append(option);
+            });
+        });
+
+    });
+    </script>
+</head>
+<body>
+    <div id="container">
+        <label>
+            省：<select id="province">
+                <option>请选择省...</option>
+            </select>
+        </label>
+        <label>
+            市：<select id="city">
+                <option>请选择市...</option>
+            </select>
+        </label>
+        <label>
+            县：<select id="county">
+                <option>请选择县...</option>
+            </select>
+        </label>
+    </div>
+</body>
+</html>
