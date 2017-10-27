@@ -1,4 +1,9 @@
  //是用来获取url中的参数的值的 根据参数名获取参数值
+
+
+	var productid = getQueryString("productid");
+
+
     function getQueryString(name) {
         var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
         var r = window.location.search.substr(1).match(reg);
