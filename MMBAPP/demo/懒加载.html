@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>原生Js页面滚动延迟加载图片</title>
+    <link rel="stylesheet/less" href="../css/base.less">
+    <link rel="stylesheet/less" href="../css/inlanddiscount.less">
+    <script src="../lib/less/less.js"></script>
+    <style type="text/css">
+    * {
+        margin: 0;
+        padding: 0
+    }
+    
+    img.scrollLoading {
+        border: 1px solid #ccc;
+        display: block;
+        margin-top: 10px;
+    }
+    
+    html,
+    body {
+        height: 100%;
+    }
+    
+    .inland-discount-list > ul > li {
+        height: 450px;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 国内折扣的列表的主体内容盒子 -->
+    <main id="recommen-product">
+        <!-- 国内折扣商品列表盒子 -->
+        <div class="inland-discount-list cu-friend">
+        </div>
+        <!-- 加载中的效果 -->
+        <div class="loading">
+            <div class="load-container load4">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
+<!-- 国内折扣商品列表模板 -->
+<script type="text/html" id="discountProductTmp">
+    <ul>
+        {{each result as value i}}
+        <li class="border-img">
+            <a href="#" title="《皮囊》 19.9元">
+                <div class="img">{{#value.productImg}}</div>
+                <div class="title">{{value.productName}}</div>
+                <div class="subtit">{{value.productPrice}}</div>
+                <div class="info">
+                    <div class="mall">{{value.productFrom}} | {{value.productTime}}</div>
+                </div>
+            </a>
+        </li>
+        {{/each}}
+    </ul>
+</script>
+<script src="../lib/jquery/jquery.js"></script>
+<script src="../js/template.js"></script>
+<script>
+var i = 0;
+var data1 = {};
+var resultLength = 0;
+$.ajax({
+        url: "http://mmb.ittun.com/api/getinlanddiscount",
+        success: function(data) {
+            data1 = data;
+            var newdata = {
+                "result": []
+            };
+            for (i = 0; i < 4; i++) {
+                newdata.result.push(data.result[i])
+            }
+            // console.log(newdata);
+            var html = template("discountProductTmp", newdata);
+            $('.inland-discount-list').html(html);
+            height = $('.inland-discount-list').height() - $(document.body).height();
+            console.log(height);
+            resultLength = data.result.length;
+            $('.loading').hide();
+        }
+    })
+    /**
+     * 1. 滚动条滚动到底部的时候加载下一页数据
+     * 2. 什么时候才知道滚动到了底部 需要获取滚动条的距离去做判断
+     * 3. 获取滚动条的距离上面的距离  每次滚动的时候都要获取距离 添加滚动事件
+     * 4. 获取到容器 -  整个网页的高度
+     * 5. 判断当 获取到容器 -  整个网页的高度  == 滚动条滚动的距离  加载下一页数据
+     */
+    //滚动条到顶部的距离
+var scrollTop = $(window).scrollTop();
+// 容器减去网页的高度 因为这个容器的高度的动态的  当加载下一页数据的时候 就会变高
+var height = $('.inland-discount-list').height() - $(document.body).height();
+console.log(height);
+$(window).on('scroll', function() {
+    // console.log($(window).scrollTop());
+    //每次滚动事件触发都获取一些滚动条的距离赋值给scrollTop
+    scrollTop = $(window).scrollTop();
+    //当 获取到容器高度 -  整个网页的高度  == 滚动条滚动的距离 并且滚动的距离不等于0
+    // console.log(log);
+    if (scrollTop == height && scrollTop != 0) {
+        //到底部了
+        $('.loading').show();
+        $.ajax({
+            url: "http://mmb.ittun.com/api/getinlanddiscount",
+            success: function(data) {
+                var newData = {
+                    "result": []
+                };
+                if (i >= resultLength) {
+                    $('.loading').hide();
+                    return;
+                }
+                // 是获取后4条数据 也就是 5 - 8 条数据
+                for (var j = i; j < i + 4; j++) {
+                    newData.result.push(data.result[j]);
+                }
+                var html = template("discountProductTmp", newData);
+                $('.inland-discount-list').append(html);
+                height = $('.inland-discount-list').height() - $(document.body).height();
+                i = j;
+                $('.loading').hide();
+            }
+        })
+    }
+});
+// var scrollTop = 0;
+// var i = 4;
+// $(window).on('scroll', function() {
+//     scrollTop = $(window).scrollTop();
+//     var height = $('.inland-discount-list').height() - $(document.body).height();
+//     if (scrollTop == height && height != 0) {
+//         $.ajax({
+//             url: "http://mmb.ittun.com/api/getinlanddiscount",
+//             success: function(data) {
+//                 var newdata = {
+//                     "result": []
+//                 };
+//                 if (i >= 20) {
+//                     return;
+//                 }
+//                 for (var j = i; j < i + 4; j++) {
+
+//                     newdata.result.push(data.result[j])
+//                 }
+//                 // console.log(newdata);
+//                 var html = template("discountProductTmp", newdata);
+//                 $('.inland-discount-list').append(html);
+//                 i += 4;
+//             }
+//         })
+//     }
+// })
+</script>

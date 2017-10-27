@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet/less" href="css/base.less">
+    <link rel="stylesheet/less" href="css/baicaijia.less">
+    <script src="js/less.js"></script>
+</head>
+
+<body>
+    <!-- 头部区域 -->
+    <header id="header">
+        <div class="back">
+            <a href="index.html" class="icon-back"></a>
+        </div>
+        <h1>            
+                    
+   白菜价-淘宝内部券
+                </h1>
+        <div class="home">
+            <a href="http://m.manmanbuy.com/?o=download" onclick="trackEvent('header部下载');" class="icon-app"></a>
+        </div>
+    </header>
+    <main class="coupon-title">
+        <div class="bcj-head-cat">
+            <div class="bcj-title">
+                <div class="ul-wapper">
+                    <ul class="tabs clearfix">
+                    </ul>
+                </div>
+            </div>
+            <div class="searchbtn">
+                <div class="icon-search">
+                </div>
+            </div>
+            <div class="searchbox" style="width: 375px; display: none;">
+                <div class="formsch clearfix">
+                    <form method="get" action="baicai.aspx">
+                        <div class="txt">
+                            <input type="search" name="key" value="" onfocus="delInput();" oninput="delInput();" class="border-img" placeholder="请输入搜索关键词" style="width: 317px;">
+                            <a href="javascript:;" class="a-delput"></a>
+                        </div>
+                        <div class="smt">
+                            <input type="submit" value="搜索">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="bcj-list">
+        </div>
+    </main>
+    <!-- 底部区域 -->
+    <footer id="footer">
+        <div class="row">
+            <div class="col-xs-4">
+                <a href="#">登录</a>
+            </div>
+            <div class="col-xs-4">
+                <a href="#">注册</a>
+            </div>
+            <div class="col-xs-4">
+                <a href="#"><img src="http://www.zuyushop.com/wap/images/top.jpg" alt="">返回顶部</a>
+            </div>
+        </div>
+        <p> <a href="#">手机APP下载</a> <a href="#">慢慢买手机版</a> -- 掌上比价平台</p>
+        <p>m.manmanbuy.com </p>
+    </footer>
+    <script type="text/html" id="baicaijiaTitleTmp">
+        {{each result as value i}}
+        <li class=""><a href="#" data-titleid="{{value.titleId}}">{{value.title}}</a></li>
+        {{/each}}
+    </script>
+    <script type="text/html" id="baicaijiaProductTmp">
+        <ul>
+            {{each result as value i}}
+            <li class="ui-border-tb ">
+                <a biz-itemid="538754112089" class="gobuy" isconvert="1" href="http://s.click.taobao.com/lkqGHQx" target="_blank"></a>
+                <div class="pic"><i></i>{{#value.productImg}}</div>
+                <div class="inf">
+                    <div class="i">
+                        <div class="t">{{#value.productName}}</div>
+                        <div class="pr">{{#value.productPrice}}
+                        </div>
+                    </div>
+                    <div class="o">
+                        <div class="bar clearfix">
+                            {{#value.productCouponRemain}}</div>
+                        <div class="b clearfix">
+                            <div class="q">{{#value.productCoupon}}</div>
+                            <div class="g">{{#value.productHref}}</div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </script>
+    <script src="js/template.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+    (function($) {
+        $.getUrlParam = function(name) {
+            var reg = new RegExp("(^|&)" +
+                name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+    })(jQuery);
+    </script>
+    <script src="js/baicaijia.js"></script>
+</body>
+
+</html>
