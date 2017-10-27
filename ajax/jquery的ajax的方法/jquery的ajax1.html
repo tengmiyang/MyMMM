@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    #container {
+        width: 360px;
+        min-height: 100px;
+        background-color: lightgreen;
+        position: absolute;
+        left: 50%;
+        top: 10px;
+        margin-left: -180px;
+    }
+    </style>
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript" src="./ajax1.js"></script>
+    <script type="text/javascript">
+    /*
+    jQuery-ajax相关API基本使用
+    */
+    $(function(){
+        $("#btn").click(function(){
+            var code = $("#code").val();
+            // ajax({
+            //     type:'post',
+            //     url:'./14.php',
+            //     dataType:'json',
+            //     async : false,
+            //     data:{username:'张三',password:'123'},
+            //     success:function(data){
+            //         var html = '<div><span>用户名：'+data.password+'</span><span>密码：'+data.password+'</span></div>'
+            //         $("#info").html(html);
+            //     }
+            // });
+            var data = ajax({
+                type:'post',
+                url:'./14.php',
+                dataType:'json',
+                async : false,
+                data:{username:'张三',password:'123'}
+            });
+            console.log(data);
+            var html = '<div><span>用户名：'+data.password+'</span><span>密码：'+data.password+'</span></div>'
+            $("#info").html(html);
+
+        });
+    });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <div>
+            图书编码：
+            <input type="text" name="code" id="code">
+            <input type="button" value="查询" id="btn">
+        </div>
+        <div id="info"></div>
+    </div>
+</body>
+
+</html>

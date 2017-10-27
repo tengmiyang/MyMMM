@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    #container {
+        width: 360px;
+        min-height: 100px;
+        background-color: lightgreen;
+        position: absolute;
+        left: 50%;
+        top: 10px;
+        margin-left: -180px;
+    }
+    </style>
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript" src="./ajax1.js"></script>
+    <script type="text/javascript">
+    /*
+    jQuery-ajax相关API基本使用
+    */
+    $(function(){
+        $("#btn").click(function(){
+            var code = $("#code").val();
+            // ajax({
+            //     type:'post',
+            //     url:'./11.php',
+            //     data:{code:code},
+            //     dataType:'json',
+            //     success:function(data){
+            //         if(data.flag == 0){
+            //             $("#info").html("该图书不存在");
+            //         }else{
+            //             var tag = '<ul><li>书名：' + data.bookname + '</li><li>作者：' + data.author + '</li><li>描述：' + data.desc + '</li></ul>';
+            //             $("#info").html(tag);
+            //         }
+            //     },
+            //     error:function(data){
+            //         console.dir(data);
+            //         $("#info").html("服务器发生错误，请与管理员联系");
+            //     }
+            // });
+
+            // var data = ajax({
+            //     type:'post',
+            //     url:'./11.php',
+            //     async:false,
+            //     data:{code:code},
+            //     dataType:'json'
+            // });
+
+            var data = $.ajax({
+                type:'post',
+                url:'./11.php',
+                async:false,
+                data:{code:code},
+                dataType:'json'
+            });
+            // console.dir(data);
+            // data.responseJSON = JSON.parse(xhr.responseText);
+            data = data.responseJSON;
+            if(data.flag == 0){
+                $("#info").html("该图书不存在");
+            }else{
+                var tag = '<ul><li>书名：' + data.bookname + '</li><li>作者：' + data.author + '</li><li>描述：' + data.desc + '</li></ul>';
+                $("#info").html(tag);
+            }
+        });
+    });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <div>
+            图书编码：
+            <input type="text" name="code" id="code">
+            <input type="button" value="查询" id="btn">
+        </div>
+        <div id="info"></div>
+    </div>
+</body>
+
+</html>
